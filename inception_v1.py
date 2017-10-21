@@ -29,29 +29,29 @@ def factorization_conv_bn_scale_relu(bottom, num_output=64, kernel_size=3, strid
 def inception(bottom, conv_output):
     conv_1x1 = L.Convolution(bottom, kernel_size=1, num_output=conv_output['conv_1x1'],
                              param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                             weight_filler=dict(type='xavier', weight_std=1),
+                             weight_filler=dict(type='xavier', std=1),
                              bias_filler=dict(type='constant', value=0.2))
     conv_1x1_relu = L.ReLU(conv_1x1, in_place=True)
 
     conv_3x3_reduce = L.Convolution(bottom, kernel_size=1, num_output=conv_output['conv_3x3_reduce'],
                                     param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                    weight_filler=dict(type='xavier', weight_std=1),
+                                    weight_filler=dict(type='xavier', std=1),
                                     bias_filler=dict(type='constant', value=0.2))
     conv_3x3_reduce_relu = L.ReLU(conv_3x3_reduce, in_place=True)
     conv_3x3 = L.Convolution(conv_3x3_reduce, kernel_size=3, num_output=conv_output['conv_3x3'], pad=1,
                              param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                             weight_filler=dict(type='xavier', weight_std=1),
+                             weight_filler=dict(type='xavier', std=1),
                              bias_filler=dict(type='constant', value=0.2))
     conv_3x3_relu = L.ReLU(conv_3x3, in_place=True)
 
     conv_5x5_reduce = L.Convolution(bottom, kernel_size=1, num_output=conv_output['conv_5x5_reduce'],
                                     param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                    weight_filler=dict(type='xavier', weight_std=1),
+                                    weight_filler=dict(type='xavier', std=1),
                                     bias_filler=dict(type='constant', value=0.2))
     conv_5x5_reduce_relu = L.ReLU(conv_5x5_reduce, in_place=True)
     conv_5x5 = L.Convolution(conv_5x5_reduce, kernel_size=5, num_output=conv_output['conv_5x5'], pad=2,
                              param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                             weight_filler=dict(type='xavier', weight_std=1),
+                             weight_filler=dict(type='xavier', std=1),
                              bias_filler=dict(type='constant', value=0.2))
     conv_5x5_relu = L.ReLU(conv_5x5, in_place=True)
 
@@ -112,7 +112,7 @@ class InceptionV1(object):
 
         n.conv1_7x7_s2 = L.Convolution(n.data, num_output=64, kernel_size=7, stride=2, pad=3,
                                        param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                       weight_filler=dict(type='xavier', weight_std=1),
+                                       weight_filler=dict(type='xavier', std=1),
                                        bias_filler=dict(type='constant', value=0.2))
         n.conv1_relu_7x7 = L.ReLU(n.conv1_7x7_s2, in_place=True)
         n.pool1_3x3_s2 = L.Pooling(n.conv1_7x7_s2, kernel_size=3, stride=1, pad=1, pool=P.Pooling.MAX)
@@ -120,13 +120,13 @@ class InceptionV1(object):
 
         n.conv2_3x3_reduce = L.Convolution(n.pool1_norm1, kernel_size=1, num_output=64, stride=1,
                                            param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                           weight_filler=dict(type='xavier', weight_std=1),
+                                           weight_filler=dict(type='xavier', std=1),
                                            bias_filler=dict(type='constant', value=0.2))
         n.conv2_relu_3x3_reduce = L.ReLU(n.conv2_3x3_reduce, in_place=True)
 
         n.conv2_3x3 = L.Convolution(n.conv2_3x3_reduce, num_output=192, kernel_size=3, stride=1, pad=1,
                                     param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                    weight_filler=dict(type='xavier', weight_std=1),
+                                    weight_filler=dict(type='xavier', std=1),
                                     bias_filler=dict(type='constant', value=0.2))
         n.conv2_relu_3x3 = L.ReLU(n.conv2_3x3, in_place=True)
         n.conv2_norm2 = L.LRN(n.conv2_3x3, local_size=5, alpha=1e-4, beta=0.75)
@@ -155,7 +155,7 @@ class InceptionV1(object):
         n.loss1_ave_pool = L.Pooling(n.inception_4a_output, kernel_size=5, stride=3, pool=P.Pooling.AVE)
         n.loss1_conv = L.Convolution(n.loss1_ave_pool, num_output=128, kernel_size=1, stride=1,
                                      param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                     weight_filler=dict(type='xavier', weight_std=1),
+                                     weight_filler=dict(type='xavier', std=1),
                                      bias_filler=dict(type='constant', value=0.2))
         n.loss1_relu_conv = L.ReLU(n.loss1_conv, in_place=True)
         n.loss1_fc, n.loss1_relu_fc, n.loss1_drop_fc = \
@@ -195,7 +195,7 @@ class InceptionV1(object):
         n.loss2_ave_pool = L.Pooling(n.inception_4d_output, kernel_size=5, stride=3, pool=P.Pooling.AVE)
         n.loss2_conv = L.Convolution(n.loss2_ave_pool, num_output=128, kernel_size=1, stride=1,
                                      param=[dict(lr_mult=1, decay_mult=1), dict(lr_mult=2, decay_mult=0)],
-                                     weight_filler=dict(type='xavier', weight_std=1),
+                                     weight_filler=dict(type='xavier', std=1),
                                      bias_filler=dict(type='constant', value=0.2))
         n.loss2_relu_conv = L.ReLU(n.loss2_conv, in_place=True)
         n.loss2_fc, n.loss2_relu_fc, n.loss2_drop_fc = \
